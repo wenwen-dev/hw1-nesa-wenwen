@@ -6,12 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
-  <!-- <script src="jquery-csv.js"></script> -->
   <title>States and Number of Representatives</title>
 </head>
 <body>
   <h1>Number of Representatives Calculator (Hamilton Algorithm)</h1>
-  <form action="" method="" id="form">
+  <form id="form">
     <fieldset>
       <legend>Calculate</legend>
       <label>
@@ -20,32 +19,14 @@
       </label>
       <label>
         Number of Representatives
-        <input type="number" name="noOfReps" max="435">
+        <input type="text" id="noOfReps">
       </label>
-      <button type="submit" onclick="exportToTable()" id="viewFile">Export to Table</button>
+      <button id="button">Submit</button>
     </fieldset>
   </form>
-  <table id="csvTable">
-    <thead>  
-      <tr>  
-          <th>    
-              Name    
-          </th>  
-          <th>    
-              Job    
-          </th>  
-          <th>    
-              City    
-          </th>  
-          <th>    
-              State    
-          </th>  
-      </tr>  
-  </thead>  
-  <tbody></tbody> 
-  </table>
   <div class="result-container">
     Result will be displayed here:
+    <ol id="resultList"></ol>
   </div>
 </body>
 </html>
