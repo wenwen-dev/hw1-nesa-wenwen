@@ -1,6 +1,6 @@
 
 const fileSelector = document.querySelector('#file-selector');
-const button = document.querySelector('#button');
+const button = document.querySelector('#buttonHamilton');
 const repNumberInput = document.querySelector('#noOfReps');
 let repNumber;
 let fileContent;
@@ -73,7 +73,7 @@ function calculate(array, num) {
 
 
 
-button.addEventListener('click', event => {
+buttonHamilton.addEventListener('click', event => {
   console.error('hiiiii');//why not displaying???
   if (!fileReadingFinished) console.log("unfinished, try later!");//same!
   else {

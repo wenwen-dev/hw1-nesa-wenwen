@@ -1,4 +1,4 @@
-input, button {
+input {
   display: block;
   margin-bottom: 2em;
 }
@@ -33,7 +33,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
+  /* width: 100%; */
   margin-top: 20px;
 }
 button:hover {
@@ -60,3 +60,8 @@ input[type="text"] {
   margin: 0 auto;  
 }
 
+
+/* Part 3 */
+#buttonHuntington {
+  margin-right: 100px;
+}
