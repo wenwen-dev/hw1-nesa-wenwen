@@ -6,19 +6,29 @@ let repNumber;
 let fileContent;
 let fileReadingFinished = false;
 
-fileSelector.addEventListener('change', event => {
-  const fileList = event.target.files;
-  const file = fileList[0];
-  const reader = new FileReader();
-  reader.readAsText(file);
+async function handleFileAsync(event) {
+  const file = event.target.files[0];
+  const data = await file.arrayBuffer();
+  const workbook = XLSX.read(data);
+  
+  /* DO SOMETHING WITH workbook HERE */
+  let sheetName = workbook.SheetNames[0];
+  let sheetContent = workbook.Sheets[sheetName];
 
-  reader.addEventListener('load', event => {
-    fileReadingFinished = true;
-    fileContent = reader.result;
-    console.log(fileContent);
-  })
-  // console.log(fileContent);
-})
+  fileContent = XLSX.utils.sheet_to_csv(sheetContent);
+  console.log(fileContent);
+  fileReadingFinished = true;
+  // console.log(fileContent.A10.h);
+  // for (const row in fileContent) {
+  //   let value = fileContent[row].v;
+  //   if (value !== undefined) {
+  //     console.log(value);
+  //   }
+
+  // }
+}
+fileSelector.addEventListener("change", handleFileAsync, false);
+
 
 
 
@@ -110,3 +120,17 @@ function saveAsCsv(array) {
   window.open(encodedUri);
 }
 
+
+
+// fileSelector.addEventListener('change', event => {
+//   const fileList = event.target.files;
+//   const file = fileList[0];
+//   const reader = new FileReader();
+//   reader.readAsText(file);
+
+//   reader.addEventListener('load', event => {
+//     fileReadingFinished = true;
+//     fileContent = reader.result;
+//     console.log(fileContent);
+//   })
+// })
