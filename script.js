@@ -1,5 +1,6 @@
 
 const fileSelector = document.querySelector('#file-selector');
+const buttonHuntington = document.querySelector('#buttonHuntington');
 const button = document.querySelector('#buttonHamilton');
 const repNumberInput = document.querySelector('#noOfReps');
 let repNumber;
@@ -7,48 +8,66 @@ let fileContent;
 let fileReadingFinished = false;
 
 async function handleFileAsync(event) {
+  //TODO, Seems this also works with csv, but why?
   const file = event.target.files[0];
   const data = await file.arrayBuffer();
   const workbook = XLSX.read(data);
   
-  /* DO SOMETHING WITH workbook HERE */
   let sheetName = workbook.SheetNames[0];
   let sheetContent = workbook.Sheets[sheetName];
 
-  fileContent = XLSX.utils.sheet_to_csv(sheetContent);
+  // fileContent = XLSX.utils.sheet_to_csv(sheetContent);
+  fileContent = XLSX.utils.sheet_to_json(sheetContent, {header: 1});
   console.log(fileContent);
   fileReadingFinished = true;
-  // console.log(fileContent.A10.h);
-  // for (const row in fileContent) {
-  //   let value = fileContent[row].v;
-  //   if (value !== undefined) {
-  //     console.log(value);
-  //   }
-
-  // }
 }
 fileSelector.addEventListener("change", handleFileAsync, false);
 
-
-
-
-function convertToArray(str) {
-  let statePopulation = str.split('\n').filter(item => item.length !== 0);
-  statePopulation.shift();
-  statePopulation = statePopulation.sort();
-  let result = [];//why using statePopulation would not work?
-  statePopulation.forEach(item => {
-    let newString = item.substring(0, item.length - 1);
-    item = newString.split(',');
-    item[1] = +item[1];
-    result.push(item);
-  })
-  console.log(result);
+function removeHeader(array) {
+  let result = array.slice(1);
   return result;
 }
 
+function reduceToTwoColumns(array) {
+  let newArray = [];
+  if (array.length > 2) {
+    newArray = array.map(item => (item = item.slice(0,2)));
+  }
+  return newArray;
+}
 
-function calculate(array, num) {
+function deleteInvalidRows(array) {
+  let result = [];
+  array.forEach(item => {
+    if ((!isNaN(item[1])) && (item[1] >= 0) && (Number.isInteger(item[1]))) {
+      result.push(item);
+    }
+  })
+  return result;
+}
+
+function checkFinalArray(array) {
+  return (array.length > 0) ? true : false;
+}
+
+function validateArray(array) {
+  console.error('hiiiii');
+  if (!fileReadingFinished) console.log("unfinished, try later!");
+  else {
+    console.log('ready');
+    let arrayWithoutHeader = removeHeader(fileContent);
+    let arrayReducedToTwoColumns = reduceToTwoColumns(arrayWithoutHeader);
+    let validArray = deleteInvalidRows(arrayReducedToTwoColumns);
+    let arrayIsValid = checkFinalArray(validArray);
+    if (!arrayIsValid) console.error("No valid state, aborting");
+    //TODO: change log to writing into html
+    else {
+      return validArray;
+    }
+  }
+}
+
+function calculateHamilton(array, num) {
   let totalPopulation = 0;
   console.log(array);
   array.forEach(item => totalPopulation = totalPopulation + item[1]);
@@ -81,27 +100,27 @@ function calculate(array, num) {
   return finalList;
 }
 
+//TODO: #2, TBC and committed: huntington 
+function calculateHuntington(array, num) {
 
+
+
+
+}
 
 buttonHamilton.addEventListener('click', event => {
-  console.error('hiiiii');//why not displaying???
-  if (!fileReadingFinished) console.log("unfinished, try later!");//same!
-  else {
-    console.log('ready');
-    // console.log(fileContent);
-    statePopulation = convertToArray(fileContent);
-    // console.log(statePopulation);
-    repNumber = Number(repNumberInput.value) || 435;
-    // console.log(repNumber);
-    let finalList = calculate(statePopulation, repNumber);
-    displayResult(finalList);
-    saveAsCsv(finalList);
+  let validatedArray = validateArray(fileContent);
+  console.log(validatedArray);
   
-  }
-})
 
+      repNumber = Number(repNumberInput.value) || 435;
+      // console.log(repNumber);
+      //TODO: #3, if button is huntington; if button is hamilton
+      let finalList = calculateHamilton(validatedArray, repNumber);
+      displayResult(finalList);
+      saveAsCsv(finalList);
+    })
 
-//FIXME: flashes quickly on screen then disappears!!!
 function displayResult(array) {
   const resultContainer = document.querySelector('#resultList');
   // resultContainer.textContent = 'testing';
