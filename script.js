@@ -3,7 +3,6 @@ const fileSelector = document.querySelector('#file-selector');
 const buttonHuntington = document.querySelector('#buttonHuntington');
 const button = document.querySelector('#buttonHamilton');
 const repNumberInput = document.querySelector('#noOfReps');
-let totalPopulation = 0;
 let repNumber;
 let fileContent;
 let fileReadingFinished = false;
@@ -68,12 +67,11 @@ function validateArray(array) {
   }
 }
 
-//FIXME: hamilton calculation is wrong
 function calculateHamilton(array, num) {
-  console.log(array);
+  let totalPopulation = 0;
   array.forEach(item => (totalPopulation = totalPopulation + item[1]));
   console.log(totalPopulation);
-  let avg = Math.round((totalPopulation / num));
+  const avg = Math.round((totalPopulation / num));
   
   let finalList =[]; //if not initiated would error 'not defined'
   let repSum = 0;
@@ -101,7 +99,6 @@ function calculateHamilton(array, num) {
   return finalList;
 }
 
-//TODO: #2, TBC and committed: huntington 
 function calculateHuntington(array) {
   repNumber = Number(repNumberInput.value) || 435;
   if (repNumber < array.length) console.log('terminate program');//TODO: write in html
@@ -134,28 +131,20 @@ buttonHuntington.addEventListener('click', event => {
     item.splice(1,1);
     item.pop();
   })
-  console.log(calculatedResult);
   displayResult(calculatedResult);
   saveAsCsv(calculatedResult);
 })
 
 buttonHamilton.addEventListener('click', event => {
   let validatedArray = validateArray(fileContent);
-  console.log(validatedArray);
   repNumber = Number(repNumberInput.value) || 435;
   let finalList = calculateHamilton(validatedArray, repNumber);
   displayResult(finalList);
   saveAsCsv(finalList);
-  
-
-      // console.log(repNumber);
-      //TODO: #3, if button is huntington; if button is hamilton
-
-    })
+})
 
 function displayResult(array) {
   const resultContainer = document.querySelector('#resultList');
-  // resultContainer.textContent = 'testing';
   array.forEach(item => {
     let list = document.createElement('li');
     list.textContent = `${item[0]}, ${item[1]}`;
