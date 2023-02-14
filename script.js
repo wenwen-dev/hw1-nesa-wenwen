@@ -3,6 +3,7 @@ const fileSelector = document.querySelector('#file-selector');
 const buttonHuntington = document.querySelector('#buttonHuntington');
 const button = document.querySelector('#buttonHamilton');
 const repNumberInput = document.querySelector('#noOfReps');
+let totalPopulation = 0;
 let repNumber;
 let fileContent;
 let fileReadingFinished = false;
@@ -67,16 +68,16 @@ function validateArray(array) {
   }
 }
 
+//FIXME: hamilton calculation is wrong
 function calculateHamilton(array, num) {
-  let totalPopulation = 0;
   console.log(array);
-  array.forEach(item => totalPopulation = totalPopulation + item[1]);
-  // console.log(totalPopulation);
+  array.forEach(item => (totalPopulation = totalPopulation + item[1]));
+  console.log(totalPopulation);
   let avg = Math.round((totalPopulation / num));
   
   let finalList =[]; //if not initiated would error 'not defined'
   let repSum = 0;
-  let secondList = [];
+  let secondList = []; 
   array.forEach(item => {
     let newItem = [item[0]];
     let anotherItem = [item[1] % avg];
@@ -101,24 +102,55 @@ function calculateHamilton(array, num) {
 }
 
 //TODO: #2, TBC and committed: huntington 
-function calculateHuntington(array, num) {
+function calculateHuntington(array) {
+  repNumber = Number(repNumberInput.value) || 435;
+  if (repNumber < array.length) console.log('terminate program');//TODO: write in html
+  else {
+    array.forEach(item => {
+      item.push(1);
+      let priorityScore = (item[1]) / (Math.sqrt(item[2] * (item[2] + 1)));
+      item.push(priorityScore);
+    });
 
-
-
-
+    while (repNumber > 0) {
+      array = array.sort((a, b) => (b[3] - a[3]));
+      let highestState = array[0];
+      highestState[2]++;
+      repNumber--;
+      array.forEach(item => {
+        let priorityScore = (item[1]) / (Math.sqrt(item[2] * (item[2] + 1)));
+        item[3] = priorityScore;
+      })
+    }
+  }
+  return array;
 }
+
+buttonHuntington.addEventListener('click', event => {
+  let validatedArray = validateArray(fileContent);
+  let calculatedResult = calculateHuntington(validatedArray);
+  calculatedResult.sort();
+  calculatedResult.forEach(item => {
+    item.splice(1,1);
+    item.pop();
+  })
+  console.log(calculatedResult);
+  displayResult(calculatedResult);
+  saveAsCsv(calculatedResult);
+})
 
 buttonHamilton.addEventListener('click', event => {
   let validatedArray = validateArray(fileContent);
   console.log(validatedArray);
+  repNumber = Number(repNumberInput.value) || 435;
+  let finalList = calculateHamilton(validatedArray, repNumber);
+  displayResult(finalList);
+  saveAsCsv(finalList);
   
 
-      repNumber = Number(repNumberInput.value) || 435;
       // console.log(repNumber);
       //TODO: #3, if button is huntington; if button is hamilton
-      let finalList = calculateHamilton(validatedArray, repNumber);
-      displayResult(finalList);
-      saveAsCsv(finalList);
+
     })
 
 function displayResult(array) {
