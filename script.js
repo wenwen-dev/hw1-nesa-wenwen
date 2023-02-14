@@ -3,12 +3,13 @@ const fileSelector = document.querySelector('#file-selector');
 const buttonHuntington = document.querySelector('#buttonHuntington');
 const button = document.querySelector('#buttonHamilton');
 const repNumberInput = document.querySelector('#noOfReps');
+const errorContainer = document.querySelector('#error');
 let repNumber;
 let fileContent;
 let fileReadingFinished = false;
+let shouldTerminate = false;
 
 async function handleFileAsync(event) {
-  //TODO, Seems this also works with csv, but why?
   const file = event.target.files[0];
   const data = await file.arrayBuffer();
   const workbook = XLSX.read(data);
@@ -52,15 +53,14 @@ function checkFinalArray(array) {
 
 function validateArray(array) {
   console.error('hiiiii');
-  if (!fileReadingFinished) console.log("unfinished, try later!");
+  if (!fileReadingFinished) errorContainer.textContent = "Please wait for 3-5 seconds after uploading file before submitting it. Refresh the page and try again"
   else {
     console.log('ready');
     let arrayWithoutHeader = removeHeader(fileContent);
     let arrayReducedToTwoColumns = reduceToTwoColumns(arrayWithoutHeader);
     let validArray = deleteInvalidRows(arrayReducedToTwoColumns);
     let arrayIsValid = checkFinalArray(validArray);
-    if (!arrayIsValid) console.error("No valid state, aborting");
-    //TODO: change log to writing into html
+    if (!arrayIsValid) errorContainer.textContent = 'Invalid file - please upload a file with state names and state population.'
     else {
       return validArray;
     }
@@ -101,7 +101,10 @@ function calculateHamilton(array, num) {
 
 function calculateHuntington(array) {
   repNumber = Number(repNumberInput.value) || 435;
-  if (repNumber < array.length) console.log('terminate program');//TODO: write in html
+  if (repNumber < array.length) {
+    errorContainer.textContent = 'Invalid input of Number of Representatives - should be at least as many as the total number of states.'
+    shouldTerminate = true;
+  }
   else {
     array.forEach(item => {
       item.push(1);
@@ -131,8 +134,13 @@ buttonHuntington.addEventListener('click', event => {
     item.splice(1,1);
     item.pop();
   })
-  displayResult(calculatedResult);
-  saveAsCsv(calculatedResult);
+  if (!shouldTerminate) {
+    displayResult(calculatedResult);
+    saveAsCsv(calculatedResult);
+    fileSelector.value = '';
+    repNumberInput.value = '';
+  }
+
 })
 
 buttonHamilton.addEventListener('click', event => {
@@ -141,10 +149,13 @@ buttonHamilton.addEventListener('click', event => {
   let finalList = calculateHamilton(validatedArray, repNumber);
   displayResult(finalList);
   saveAsCsv(finalList);
+  fileSelector.value = '';
+  repNumberInput.value = '';
 })
 
 function displayResult(array) {
   const resultContainer = document.querySelector('#resultList');
+  resultContainer.innerHTML = '';
   array.forEach(item => {
     let list = document.createElement('li');
     list.textContent = `${item[0]}, ${item[1]}`;

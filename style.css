@@ -55,7 +55,7 @@ input[type="text"] {
 }
 
 .display {
-  margin-top: 10rem;
+  margin-top: 15rem;
   width: 30%; 
   margin: 0 auto;  
 }
@@ -64,4 +64,10 @@ input[type="text"] {
 /* Part 3 */
 #buttonHuntington {
   margin-right: 100px;
+}
+
+.error {
+  text-align: center;
+  font-size: large;
+  color: red;
 }
