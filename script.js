@@ -1,4 +1,3 @@
-
 const fileSelector = document.querySelector('#file-selector');
 const buttonHuntington = document.querySelector('#buttonHuntington');
 const button = document.querySelector('#buttonHamilton');
@@ -102,7 +101,9 @@ function calculateHamilton(array, num) {
 function calculateHuntington(array) {
   repNumber = Number(repNumberInput.value) || 435;
   if (repNumber < array.length) {
-    errorContainer.textContent = 'Invalid input of Number of Representatives - should be at least as many as the total number of states.'
+    errorContainer.textContent = 'Invalid input of Number of Representatives - should be at least as many as the total number of states. Refresh page and try again please.'
+    fileSelector.value = '';
+    repNumberInput.value = '';
     shouldTerminate = true;
   }
   else {
@@ -185,3 +186,4 @@ function saveAsCsv(array) {
 //     console.log(fileContent);
 //   })
 // })
+

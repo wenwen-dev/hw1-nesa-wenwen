@@ -1,0 +1,73 @@
+input {
+  display: block;
+  margin-bottom: 2em;
+}
+
+h1 {
+  margin-left: 10cm;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  margin: 0;
+  padding: 20px;
+}
+form {
+  width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+legend {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+button {
+  background-color: #4c9daf;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* width: 100%; */
+  margin-top: 20px;
+}
+button:hover {
+  background-color: #3e528e;
+}
+
+input[type="file"] {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+}
+
+input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.display {
+  margin-top: 15rem;
+  width: 30%; 
+  margin: 0 auto;  
+}
+
+
+/* Part 3 */
+#buttonHuntington {
+  margin-right: 100px;
+}
+
+.error {
+  text-align: center;
+  font-size: large;
+  color: red;
+}
