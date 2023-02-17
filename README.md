@@ -6,6 +6,8 @@ The default calculation option is based on Huntington-Hill's method, so by click
 In case the user doesn't specify the number of representatives, the default is set to 435.
 
 
+
+
 The submission commit is on Fri Feb 10 11:30:27 2023 -0800
 
    
